@@ -33,29 +33,17 @@ export default function ExportEngine({ slides, device, logoData, selectedIndex }
       }
 
       try {
-        // Multiple attempts — html-to-image sometimes needs a warm-up render
-        let dataUrl: string | null = null;
-        for (let attempt = 0; attempt < 3; attempt++) {
-          try {
-            dataUrl = await toPng(node, {
-              width: deviceConfig.width,
-              height: deviceConfig.height,
-              pixelRatio: 1,
-              cacheBust: true,
-              skipAutoScale: true,
-              filter: (domNode: HTMLElement) => {
-                // Skip hidden elements
-                if (domNode.style?.display === "none") return false;
-                return true;
-              },
-            });
-            if (dataUrl) break;
-          } catch {
-            await new Promise((r) => setTimeout(r, 500));
-          }
-        }
-
-        if (!dataUrl) throw new Error("Failed after 3 attempts");
+        const dataUrl = await toPng(node, {
+          width: deviceConfig.width,
+          height: deviceConfig.height,
+          pixelRatio: 1,
+          cacheBust: true,
+          includeQueryParams: true,
+          style: {
+            transform: 'none',
+            transformOrigin: 'top left',
+          },
+        });
 
         const link = document.createElement("a");
         link.download = `screenshot-${index + 1}.png`;
@@ -136,7 +124,6 @@ export default function ExportEngine({ slides, device, logoData, selectedIndex }
           top: 0,
           zIndex: -1,
           pointerEvents: "none",
-          opacity: 0,
         }}
       >
         {slides.map((slide) => (

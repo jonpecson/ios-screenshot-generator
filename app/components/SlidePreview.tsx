@@ -32,7 +32,7 @@ export default function SlidePreview({
 
   const defaultScale = isTablet ? 0.65 : 0.58;
   const phoneWidth = W * (slide.deviceScale ?? defaultScale);
-  const logoSrc = logoData || brandConfig.logoPath;
+  const logoSrc = logoData; // Only use uploaded logo, not file paths that may 404
 
   const inner = (
     <div
@@ -65,15 +65,12 @@ export default function SlidePreview({
       )}
 
       {/* Logo at top */}
-      {brandConfig.showLogo && brandConfig.logoPosition === "top" && (
+      {brandConfig.showLogo && brandConfig.logoPosition === "top" && logoSrc && (
         <div style={{ marginTop: 120, marginBottom: 20 }}>
           <img
             src={logoSrc}
             alt={brandConfig.name}
             style={{ height: 60, objectFit: "contain" }}
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
           />
         </div>
       )}
@@ -161,7 +158,7 @@ export default function SlidePreview({
       </div>
 
       {/* Logo at bottom */}
-      {brandConfig.showLogo && brandConfig.logoPosition === "bottom" && (
+      {brandConfig.showLogo && brandConfig.logoPosition === "bottom" && logoSrc && (
         <div
           style={{
             position: "absolute",
@@ -177,9 +174,6 @@ export default function SlidePreview({
             src={logoSrc}
             alt={brandConfig.name}
             style={{ height: 50, objectFit: "contain", opacity: 0.8 }}
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
           />
         </div>
       )}

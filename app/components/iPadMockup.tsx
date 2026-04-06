@@ -27,7 +27,7 @@ export default function IPadMockup({
   const innerRadius = borderRadius - bezelWidth;
   const cameraSize = frameWidth * 0.015;
 
-  const imgSrc = screenshotSrc || fallbackPath;
+  const imgSrc = screenshotSrc;
 
   return (
     <div
@@ -55,34 +55,26 @@ export default function IPadMockup({
             bottom: bezelWidth * 2,
             borderRadius: innerRadius,
             overflow: "hidden",
-            background: "#000",
+            background: imgSrc ? "#000" : "linear-gradient(180deg, #1a1a2e 0%, #2d2d4e 100%)",
           }}
         >
-          <img
-            src={imgSrc}
-            alt="App screenshot"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "top",
-              display: "block",
-            }}
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = "none";
-              const parent = target.parentElement;
-              if (parent) {
-                parent.style.background =
-                  "linear-gradient(180deg, #1a1a2e 0%, #2d2d4e 100%)";
-                parent.innerHTML = `
-                  <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555;font-size:${frameWidth * 0.04}px;text-align:center;padding:20px;">
-                    Upload screenshot<br/>in the editor panel →
-                  </div>
-                `;
-              }
-            }}
-          />
+          {imgSrc ? (
+            <img
+              src={imgSrc}
+              alt="App screenshot"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "top",
+                display: "block",
+              }}
+            />
+          ) : (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "#555", fontSize: frameWidth * 0.04, textAlign: "center", padding: 20 }}>
+              Upload screenshot<br/>in the editor panel →
+            </div>
+          )}
         </div>
 
         {/* Front camera */}
