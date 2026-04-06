@@ -6,6 +6,8 @@ Generate App Store screenshots for your iOS and iPad app — entirely in the bro
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js) ![License](https://img.shields.io/badge/license-MIT%20%2B%20Commons%20Clause-blue) ![Deploy](https://img.shields.io/badge/deploy-Netlify-00C7B7?logo=netlify)
 
+![Screenshot Generator Preview](public/images/preview.png)
+
 ## Features
 
 - **In-browser editor** — edit titles, colors, and upload screenshots without touching code
@@ -129,4 +131,4 @@ MIT + Commons Clause — free to use, modify, and share. Cannot be sold as a pro
 
 ## Author
 
-[Jon Pecson](https://github.com/jonpecson)
+[John Pecson](https://github.com/jonpecson)
