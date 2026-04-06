@@ -20,6 +20,10 @@ export interface SlideConfig {
   categoryColor: string;
   accentLineColor: string;
   showAccentLine: boolean;
+  /** Show/hide category label (default: true) */
+  showCategory?: boolean;
+  /** Show/hide subtitle (default: true) */
+  showSubtitle?: boolean;
   /** Device mockup size as percentage of slide width (0.3 to 0.9, default: 0.58 phone / 0.65 tablet) */
   deviceScale?: number;
   /** Vertical offset for the device mockup in pixels (positive = lower) */

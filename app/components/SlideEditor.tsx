@@ -71,16 +71,29 @@ export default function SlideEditor({ slide, onChange, onDelete }: SlideEditorPr
     <div className="space-y-4">
       {/* Category */}
       <div>
-        <label className="text-xs text-gray-500 uppercase tracking-wider mb-1 block">
-          Category Label
-        </label>
-        <input
-          type="text"
-          value={slide.category}
-          onChange={(e) => update({ category: e.target.value })}
-          placeholder="e.g. COMMUNITY"
-          className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors"
-        />
+        <div className="flex items-center justify-between mb-1">
+          <label className="text-xs text-gray-500 uppercase tracking-wider">
+            Category Label
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={slide.showCategory !== false}
+              onChange={(e) => update({ showCategory: e.target.checked })}
+              className="accent-[#C9A84C] w-3 h-3"
+            />
+            <span className="text-[10px] text-gray-500">Show</span>
+          </label>
+        </div>
+        {slide.showCategory !== false && (
+          <input
+            type="text"
+            value={slide.category}
+            onChange={(e) => update({ category: e.target.value })}
+            placeholder="e.g. COMMUNITY"
+            className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors"
+          />
+        )}
       </div>
 
       {/* Title */}
@@ -98,15 +111,28 @@ export default function SlideEditor({ slide, onChange, onDelete }: SlideEditorPr
 
       {/* Subtitle */}
       <div>
-        <label className="text-xs text-gray-500 uppercase tracking-wider mb-1 block">
-          Subtitle
-        </label>
-        <input
-          type="text"
-          value={slide.subtitle}
-          onChange={(e) => update({ subtitle: e.target.value })}
-          className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors"
-        />
+        <div className="flex items-center justify-between mb-1">
+          <label className="text-xs text-gray-500 uppercase tracking-wider">
+            Subtitle
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={slide.showSubtitle !== false}
+              onChange={(e) => update({ showSubtitle: e.target.checked })}
+              className="accent-[#C9A84C] w-3 h-3"
+            />
+            <span className="text-[10px] text-gray-500">Show</span>
+          </label>
+        </div>
+        {slide.showSubtitle !== false && (
+          <input
+            type="text"
+            value={slide.subtitle}
+            onChange={(e) => update({ subtitle: e.target.value })}
+            className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors"
+          />
+        )}
       </div>
 
       {/* Screenshot upload with drag & drop */}

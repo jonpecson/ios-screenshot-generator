@@ -89,7 +89,7 @@ export default function SlidePreview({
         }}
       >
         {/* Category label */}
-        {slide.category && (
+        {slide.showCategory !== false && slide.category && (
           <div
             style={{
               fontSize: 28,
@@ -117,17 +117,19 @@ export default function SlidePreview({
         >
           {slide.title}
         </h1>
-        <p
-          style={{
-            fontSize: 38,
-            color: slide.subtitleColor,
-            marginTop: 28,
-            lineHeight: 1.4,
-            fontWeight: 400,
-          }}
-        >
-          {slide.subtitle}
-        </p>
+        {slide.showSubtitle !== false && (
+          <p
+            style={{
+              fontSize: 38,
+              color: slide.subtitleColor,
+              marginTop: 28,
+              lineHeight: 1.4,
+              fontWeight: 400,
+            }}
+          >
+            {slide.subtitle}
+          </p>
+        )}
       </div>
 
       {/* Device mockup */}
