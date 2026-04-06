@@ -77,7 +77,7 @@ export default function PhoneMockup({
                   "linear-gradient(180deg, #1a1a2e 0%, #2d2d4e 100%)";
                 parent.innerHTML = `
                   <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555;font-size:${frameWidth * 0.05}px;text-align:center;padding:20px;">
-                    Drop screenshot<br/>here
+                    Upload screenshot<br/>in the editor panel →
                   </div>
                 `;
               }

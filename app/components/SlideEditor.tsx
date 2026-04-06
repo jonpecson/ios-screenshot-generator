@@ -109,43 +109,56 @@ export default function SlideEditor({ slide, onChange, onDelete }: SlideEditorPr
         />
       </div>
 
-      {/* Screenshot upload */}
+      {/* Screenshot upload with drag & drop */}
       <div>
         <label className="text-xs text-gray-500 uppercase tracking-wider mb-1 block">
           Screenshot
         </label>
-        <div className="flex gap-2 items-center">
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="px-3 py-1.5 text-xs rounded-lg bg-[#1a1a1a] border border-[#333] text-gray-300 hover:border-[#C9A84C] hover:text-white transition-colors"
-          >
-            {slide.screenshotData ? "Replace Image" : "Upload Image"}
-          </button>
-          {slide.screenshotData && (
-            <button
-              onClick={() => update({ screenshotData: null })}
-              className="px-2 py-1.5 text-xs rounded-lg text-red-400 hover:text-red-300 transition-colors"
-            >
-              Clear
-            </button>
+        <div
+          className="border-2 border-dashed border-[#333] rounded-lg p-4 text-center cursor-pointer hover:border-[#C9A84C] transition-colors"
+          onClick={() => fileInputRef.current?.click()}
+          onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('border-[#C9A84C]', 'bg-[#C9A84C]/5'); }}
+          onDragLeave={(e) => { e.currentTarget.classList.remove('border-[#C9A84C]', 'bg-[#C9A84C]/5'); }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-[#C9A84C]', 'bg-[#C9A84C]/5');
+            const file = e.dataTransfer.files?.[0];
+            if (file && file.type.startsWith('image/')) {
+              const reader = new FileReader();
+              reader.onload = () => update({ screenshotData: reader.result as string });
+              reader.readAsDataURL(file);
+            }
+          }}
+        >
+          {slide.screenshotData ? (
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-16 h-28 rounded overflow-hidden border border-[#333]">
+                <img src={slide.screenshotData} alt="Preview" className="w-full h-full object-cover object-top" />
+              </div>
+              <span className="text-xs text-gray-400">Click or drop to replace</span>
+            </div>
+          ) : (
+            <div className="py-4">
+              <p className="text-sm text-gray-400">Drop image here</p>
+              <p className="text-xs text-gray-600 mt-1">or click to browse</p>
+            </div>
           )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleScreenshotUpload}
-            className="hidden"
-          />
         </div>
         {slide.screenshotData && (
-          <div className="mt-2 w-16 h-28 rounded overflow-hidden border border-[#333]">
-            <img
-              src={slide.screenshotData}
-              alt="Preview"
-              className="w-full h-full object-cover object-top"
-            />
-          </div>
+          <button
+            onClick={(e) => { e.stopPropagation(); update({ screenshotData: null }); }}
+            className="mt-2 px-2 py-1 text-xs rounded text-red-400 hover:text-red-300 transition-colors"
+          >
+            Remove image
+          </button>
         )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleScreenshotUpload}
+          className="hidden"
+        />
       </div>
 
       {/* Divider */}
