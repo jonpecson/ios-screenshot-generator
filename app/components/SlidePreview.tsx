@@ -56,15 +56,14 @@ export default function SlidePreview({
           style={{
             display: "flex",
             justifyContent: "center",
-            paddingTop: 80,
-            marginBottom: 20,
+            paddingTop: 100,
+            paddingBottom: 30,
           }}
         >
           <div
             style={{
               width: `${slide.accentLineWidth ?? 10}%`,
-              height: 8,
-              borderRadius: 4,
+              height: 6,
               background: slide.accentLineColor,
             }}
           />
