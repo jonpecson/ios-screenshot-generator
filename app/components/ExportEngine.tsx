@@ -46,7 +46,8 @@ export default function ExportEngine({ slides, device, logoData, selectedIndex }
         });
 
         const link = document.createElement("a");
-        link.download = `screenshot-${index + 1}.png`;
+        const deviceLabel = deviceConfig.type === "tablet" ? "ipad" : "iphone";
+        link.download = `${deviceLabel}-screenshot-${index + 1}.png`;
         link.href = dataUrl;
         document.body.appendChild(link);
         link.click();
