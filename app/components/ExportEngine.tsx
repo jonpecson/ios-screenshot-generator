@@ -2,56 +2,68 @@
 
 import React, { useRef, useState, useCallback } from "react";
 import { toPng } from "html-to-image";
-import SlideCard from "./SlideCard";
-import { brandConfig } from "@/screenshots.config";
-import { slides, exportConfig } from "@/screenshots.config";
+import SlidePreview from "./SlidePreview";
+import { SlideConfig, DeviceType, DEVICES } from "@/screenshots.config";
 
-/**
- * Hidden full-size renderer + export button.
- * Renders each slide at full export resolution off-screen, then captures as PNG.
- */
-export default function ExportEngine() {
+interface ExportEngineProps {
+  slides: SlideConfig[];
+  device: DeviceType;
+  logoData: string | null;
+}
+
+export default function ExportEngine({ slides, device, logoData }: ExportEngineProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [progress, setProgress] = useState("");
   const [currentExportIndex, setCurrentExportIndex] = useState<number | null>(null);
 
-  const exportAll = useCallback(async () => {
-    setExporting(true);
+  const deviceConfig = DEVICES[device];
 
-    for (let i = 0; i < slides.length; i++) {
-      const slide = slides[i];
-      setProgress(`Exporting ${i + 1} of ${slides.length}: ${slide.id}...`);
-      setCurrentExportIndex(i);
+  const exportSlide = useCallback(
+    async (index: number) => {
+      const slide = slides[index];
+      setCurrentExportIndex(index);
 
       // Wait for render
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 600));
 
       const node = document.getElementById(`export-slide-${slide.id}`);
       if (!node) {
         console.error(`Could not find export node for ${slide.id}`);
-        continue;
+        return false;
       }
 
       try {
         const dataUrl = await toPng(node, {
-          width: exportConfig.width,
-          height: exportConfig.height,
-          pixelRatio: exportConfig.pixelRatio,
+          width: deviceConfig.width,
+          height: deviceConfig.height,
+          pixelRatio: 1,
           cacheBust: true,
         });
 
-        // Trigger download
         const link = document.createElement("a");
-        link.download = `${exportConfig.filePrefix}-${slide.id}-${exportConfig.width}x${exportConfig.height}.png`;
+        link.download = `screenshot-${index + 1}.png`;
         link.href = dataUrl;
         link.click();
 
-        // Small delay between downloads so browser handles them
         await new Promise((resolve) => setTimeout(resolve, 300));
+        return true;
       } catch (err) {
         console.error(`Failed to export ${slide.id}:`, err);
-        setProgress(`Error exporting ${slide.id}. Check console.`);
+        return false;
+      }
+    },
+    [slides, deviceConfig]
+  );
+
+  const exportAll = useCallback(async () => {
+    setExporting(true);
+
+    for (let i = 0; i < slides.length; i++) {
+      setProgress(`Exporting ${i + 1} of ${slides.length}...`);
+      const success = await exportSlide(i);
+      if (!success) {
+        setProgress(`Error exporting slide ${i + 1}. Check console.`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
@@ -59,83 +71,38 @@ export default function ExportEngine() {
     setCurrentExportIndex(null);
     setProgress("All screenshots exported!");
     setExporting(false);
-
     setTimeout(() => setProgress(""), 3000);
-  }, []);
+  }, [slides, exportSlide]);
 
-  const exportSingle = useCallback(async (slideIndex: number) => {
-    const slide = slides[slideIndex];
-    setExporting(true);
-    setProgress(`Exporting ${slide.id}...`);
-    setCurrentExportIndex(slideIndex);
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    const node = document.getElementById(`export-slide-${slide.id}`);
-    if (!node) {
-      setProgress("Error: could not find render node.");
+  const exportSingle = useCallback(
+    async (index: number) => {
+      setExporting(true);
+      setProgress(`Exporting slide ${index + 1}...`);
+      await exportSlide(index);
+      setCurrentExportIndex(null);
+      setProgress(`Exported slide ${index + 1}!`);
       setExporting(false);
-      return;
-    }
-
-    try {
-      const dataUrl = await toPng(node, {
-        width: exportConfig.width,
-        height: exportConfig.height,
-        pixelRatio: exportConfig.pixelRatio,
-        cacheBust: true,
-      });
-
-      const link = document.createElement("a");
-      link.download = `${exportConfig.filePrefix}-${slide.id}-${exportConfig.width}x${exportConfig.height}.png`;
-      link.href = dataUrl;
-      link.click();
-
-      setProgress(`Exported ${slide.id}!`);
-    } catch (err) {
-      console.error(`Failed to export ${slide.id}:`, err);
-      setProgress(`Error exporting ${slide.id}`);
-    }
-
-    setCurrentExportIndex(null);
-    setExporting(false);
-    setTimeout(() => setProgress(""), 2000);
-  }, []);
+      setTimeout(() => setProgress(""), 2000);
+    },
+    [exportSlide]
+  );
 
   return (
     <>
       {/* Export controls */}
-      <div className="flex items-center gap-4 flex-wrap">
+      <div className="flex items-center gap-3">
         <button
           onClick={exportAll}
           disabled={exporting}
-          className="px-6 py-3 rounded-lg font-semibold text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110 active:scale-95"
-          style={{ background: brandConfig.accentColor }}
+          className="px-5 py-2.5 rounded-lg font-semibold text-sm text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110 active:scale-95"
+          style={{ background: "#C9A84C" }}
         >
-          {exporting ? "Exporting..." : "Export All Screenshots"}
+          {exporting ? "Exporting..." : "Export All"}
         </button>
 
         {progress && (
-          <span className="text-sm text-gray-400">{progress}</span>
+          <span className="text-xs text-gray-400">{progress}</span>
         )}
-
-        <span className="text-xs text-gray-500 ml-auto">
-          Export: {exportConfig.width} x {exportConfig.height}px
-        </span>
-      </div>
-
-      {/* Individual export buttons */}
-      <div className="flex gap-2 flex-wrap mt-2">
-        {slides.map((slide, i) => (
-          <button
-            key={slide.id}
-            onClick={() => exportSingle(i)}
-            disabled={exporting}
-            className="px-3 py-1 text-xs rounded bg-gray-800 text-gray-300 hover:bg-gray-700 disabled:opacity-50 transition-colors"
-          >
-            Export {slide.id}
-          </button>
-        ))}
       </div>
 
       {/* Hidden off-screen full-size render area */}
@@ -149,12 +116,18 @@ export default function ExportEngine() {
           pointerEvents: "none",
         }}
       >
-        {currentExportIndex !== null && (
-          <div id={`export-slide-${slides[currentExportIndex].id}`}>
-            <SlideCard slide={slides[currentExportIndex]} fullSize={true} />
-          </div>
+        {currentExportIndex !== null && slides[currentExportIndex] && (
+          <SlidePreview
+            id={`export-slide-${slides[currentExportIndex].id}`}
+            slide={slides[currentExportIndex]}
+            device={device}
+            logoData={logoData}
+            fullSize={true}
+          />
         )}
       </div>
     </>
   );
 }
+
+export type { ExportEngineProps };

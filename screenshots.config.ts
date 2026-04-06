@@ -3,104 +3,136 @@
  * App Store Screenshot Configuration
  * ============================================================
  *
- * HOW TO EDIT:
- * 1. Change titles, subtitles, and descriptions below
- * 2. Replace images in /public/screenshots/ (use slide1.png, slide2.png, etc.)
- * 3. Adjust gradients/colors per slide
- * 4. Run `npm run dev` to preview, then click "Export All"
+ * This file provides the DEFAULT initial state for the in-browser editor.
+ * All changes are made live in the editor — no need to edit this file.
  */
 
 export interface SlideConfig {
-  /** Unique ID for the slide */
   id: string;
-  /** Big headline text */
   title: string;
-  /** Smaller description text below the headline */
   subtitle: string;
-  /** Path to the app screenshot (relative to /public/) */
-  screenshotPath: string;
-  /** CSS gradient or solid color for the slide background */
+  category: string;
+  screenshotData: string | null; // base64 data URL from file picker
+  screenshotPath: string; // fallback path in /public/
   background: string;
-  /** Optional: override title color (default: white) */
-  titleColor?: string;
-  /** Optional: override subtitle color (default: rgba(255,255,255,0.85)) */
-  subtitleColor?: string;
+  titleColor: string;
+  subtitleColor: string;
+  categoryColor: string;
+  accentLineColor: string;
+  showAccentLine: boolean;
 }
 
+export type DeviceType =
+  | "iphone-6.7"
+  | "iphone-6.5"
+  | "ipad-12.9"
+  | "ipad-11";
+
+export interface DeviceConfig {
+  label: string;
+  width: number;
+  height: number;
+  type: "phone" | "tablet";
+}
+
+export const DEVICES: Record<DeviceType, DeviceConfig> = {
+  "iphone-6.7": { label: 'iPhone 6.7"', width: 1290, height: 2796, type: "phone" },
+  "iphone-6.5": { label: 'iPhone 6.5"', width: 1284, height: 2778, type: "phone" },
+  "ipad-12.9": { label: 'iPad Pro 12.9"', width: 2048, height: 2732, type: "tablet" },
+  "ipad-11": { label: 'iPad Pro 11"', width: 1668, height: 2388, type: "tablet" },
+};
+
 export const brandConfig = {
-  /** Brand name displayed in exports */
-  name: "Your App Name",
-  /** Path to horizontal logo (relative to /public/) */
-  logoPath: "/images/logo.png",
-  /** Primary accent color */
-  accentColor: "#6366F1",
-  /** Show logo on slides */
+  name: "Empire Crypto Trading",
+  logoPath: "/images/logo-horizontal.png",
+  accentColor: "#C9A84C",
   showLogo: true,
-  /** Logo position: "top" or "bottom" */
   logoPosition: "bottom" as "top" | "bottom",
 };
 
-/**
- * Apple App Store required resolutions:
- * - iPhone 6.7" (1290 x 2796) — iPhone 15 Pro Max, 14 Pro Max
- * - iPhone 6.5" (1284 x 2778) — iPhone 14 Plus, 13 Pro Max
- * - iPhone 5.5" (1242 x 2208) — iPhone 8 Plus (if supporting)
- *
- * This generator exports at 1290x2796 (6.7") by default.
- * Change below if you need different sizes.
- */
-export const exportConfig = {
-  /** Export width in pixels */
-  width: 1290,
-  /** Export height in pixels */
-  height: 2796,
-  /** Pixel ratio for rendering (2 = retina) */
-  pixelRatio: 1,
-  /** File name prefix for exported images */
-  filePrefix: "appstore-screenshot",
-};
-
-export const slides: SlideConfig[] = [
+export const defaultSlides: SlideConfig[] = [
   {
     id: "slide-1",
     title: "Your App's\nBig Feature",
     subtitle: "Describe the main value proposition here",
+    category: "FEATURED",
+    screenshotData: null,
     screenshotPath: "/screenshots/slide1.png",
-    background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+    background: "#0a0a0a",
+    titleColor: "#FFFFFF",
+    subtitleColor: "#888888",
+    categoryColor: "#C9A84C",
+    accentLineColor: "#C9A84C",
+    showAccentLine: true,
   },
   {
     id: "slide-2",
     title: "Real-Time\nNotifications",
     subtitle: "Stay updated with instant push notifications",
+    category: "ALERTS",
+    screenshotData: null,
     screenshotPath: "/screenshots/slide2.png",
-    background: "linear-gradient(180deg, #0f3460 0%, #1a1a2e 100%)",
+    background: "#0a0a0a",
+    titleColor: "#FFFFFF",
+    subtitleColor: "#888888",
+    categoryColor: "#C9A84C",
+    accentLineColor: "#C9A84C",
+    showAccentLine: true,
   },
   {
     id: "slide-3",
-    title: "Built-In\nCommunity",
-    subtitle: "Connect with like-minded people and grow together",
+    title: "Join the\nCommunity",
+    subtitle: "Connect with like-minded traders and grow together",
+    category: "COMMUNITY",
+    screenshotData: null,
     screenshotPath: "/screenshots/slide3.png",
-    background: "linear-gradient(180deg, #1a1a2e 0%, #2d1b4e 100%)",
+    background: "#0a0a0a",
+    titleColor: "#FFFFFF",
+    subtitleColor: "#888888",
+    categoryColor: "#C9A84C",
+    accentLineColor: "#C9A84C",
+    showAccentLine: true,
   },
   {
     id: "slide-4",
     title: "Learn &\nGrow",
     subtitle: "Structured courses to level up your skills",
+    category: "EDUCATION",
+    screenshotData: null,
     screenshotPath: "/screenshots/slide4.png",
-    background: "linear-gradient(180deg, #2d1b4e 0%, #1a1a2e 100%)",
+    background: "#0a0a0a",
+    titleColor: "#FFFFFF",
+    subtitleColor: "#888888",
+    categoryColor: "#C9A84C",
+    accentLineColor: "#C9A84C",
+    showAccentLine: true,
   },
   {
     id: "slide-5",
     title: "Dashboard\n& Analytics",
     subtitle: "Track everything that matters in real time",
+    category: "ANALYTICS",
+    screenshotData: null,
     screenshotPath: "/screenshots/slide5.png",
-    background: "linear-gradient(180deg, #1a1a2e 0%, #0a2e1a 50%, #1a1a2e 100%)",
+    background: "#0a0a0a",
+    titleColor: "#FFFFFF",
+    subtitleColor: "#888888",
+    categoryColor: "#C9A84C",
+    accentLineColor: "#C9A84C",
+    showAccentLine: true,
   },
   {
     id: "slide-6",
     title: "Secure &\nReliable",
     subtitle: "Your data is protected with enterprise-grade security",
+    category: "SECURITY",
+    screenshotData: null,
     screenshotPath: "/screenshots/slide6.png",
-    background: "linear-gradient(180deg, #0f3460 0%, #1a1a2e 50%, #2d1b4e 100%)",
+    background: "#0a0a0a",
+    titleColor: "#FFFFFF",
+    subtitleColor: "#888888",
+    categoryColor: "#C9A84C",
+    accentLineColor: "#C9A84C",
+    showAccentLine: true,
   },
 ];
