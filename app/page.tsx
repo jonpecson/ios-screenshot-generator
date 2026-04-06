@@ -109,20 +109,6 @@ export default function Home() {
 
         <div className="flex items-center gap-3">
           {/* Logo upload */}
-          <button
-            onClick={() => logoInputRef.current?.click()}
-            className="px-3 py-1.5 text-xs rounded-lg bg-[#1a1a1a] border border-[#333] text-gray-400 hover:border-[#555] hover:text-gray-200 transition-colors"
-          >
-            {logoData ? "Change Logo" : "Upload Logo"}
-          </button>
-          <input
-            ref={logoInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleLogoUpload}
-            className="hidden"
-          />
-
           <DeviceSelector value={device} onChange={setDevice} />
 
           <div className="text-[10px] text-gray-600 font-mono">
