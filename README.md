@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# iOS Screenshot Generator
 
-## Getting Started
+Generate App Store screenshots for your iOS app. Built with Next.js, Tailwind CSS, and `html-to-image`.
 
-First, run the development server:
+![Preview](https://img.shields.io/badge/Next.js-15-black?logo=next.js) ![License](https://img.shields.io/badge/license-MIT%20%2B%20Commons%20Clause-blue)
+
+## Features
+
+- Pure CSS iPhone mockup frame (no image assets needed)
+- Edit titles, descriptions, and colors from a single config file
+- Export at Apple's required resolutions (1290x2796 for iPhone 6.7")
+- Supports up to 10 slides
+- One-click "Export All" to download PNGs
+- Dark preview UI
+
+## Quick Start
 
 ```bash
+git clone https://github.com/jonpecson/ios-screenshot-generator.git
+cd ios-screenshot-generator
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How to Use
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Add your screenshots
 
-## Learn More
+Drop your app screenshots into `/public/screenshots/` as:
+- `slide1.png`
+- `slide2.png`
+- `slide3.png`
+- etc.
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Add your logo (optional)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Place your app logo at `/public/images/logo.png`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Edit the config
 
-## Deploy on Vercel
+Open `screenshots.config.ts` and customize:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```typescript
+// Change your brand
+export const brandConfig = {
+  name: "Your App Name",
+  logoPath: "/images/logo.png",
+  accentColor: "#6366F1",  // Your brand color
+  showLogo: true,
+  logoPosition: "bottom",
+};
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+// Edit each slide
+export const slides = [
+  {
+    id: "slide-1",
+    title: "Your App's\nBig Feature",
+    subtitle: "Describe the main value proposition here",
+    screenshotPath: "/screenshots/slide1.png",
+    background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)",
+  },
+  // ... add more slides
+];
+```
+
+### 4. Export
+
+Click **Export All Screenshots** in the browser to download PNGs at the correct App Store resolution.
+
+## Export Resolutions
+
+| Device | Resolution | Supported |
+|--------|-----------|-----------|
+| iPhone 6.7" (15 Pro Max) | 1290 x 2796 | Default |
+| iPhone 6.5" (14 Plus) | 1284 x 2778 | Change in config |
+| iPhone 5.5" (8 Plus) | 1242 x 2208 | Change in config |
+
+Edit `exportConfig` in `screenshots.config.ts` to change the resolution.
+
+## Project Structure
+
+```
+├── screenshots.config.ts    # Edit this file to customize slides
+├── public/
+│   ├── screenshots/         # Drop your app screenshots here
+│   └── images/              # Your logo goes here
+├── app/
+│   ├── page.tsx             # Preview page
+│   └── components/
+│       ├── SlideCard.tsx     # Individual slide renderer
+│       ├── PhoneMockup.tsx   # CSS iPhone frame
+│       └── ExportEngine.tsx  # Export logic
+```
+
+## License
+
+MIT + Commons Clause — free to use, modify, and share. Cannot be sold as a product or service.
+
+## Author
+
+[Jon Pecson](https://github.com/jonpecson)
