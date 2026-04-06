@@ -102,10 +102,6 @@ export default function Home() {
               (e.target as HTMLImageElement).style.display = "none";
             }}
           />
-          <div className="h-4 w-px bg-[#333]" />
-          <h1 className="text-sm font-semibold text-gray-200">
-            Screenshot Generator
-          </h1>
           <span className="text-xs text-gray-600">
             {slides.length} slides
           </span>
