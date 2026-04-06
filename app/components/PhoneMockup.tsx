@@ -85,20 +85,7 @@ export default function PhoneMockup({
           />
         </div>
 
-        {/* Dynamic Island */}
-        <div
-          style={{
-            position: "absolute",
-            top: bezelWidth * 1.5 + dynamicIslandHeight * 0.35,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: dynamicIslandWidth,
-            height: dynamicIslandHeight,
-            borderRadius: dynamicIslandHeight / 2,
-            background: "#000",
-            zIndex: 10,
-          }}
-        />
+        {/* Dynamic Island — hidden (screenshots already include it) */}
       </div>
 
       {/* Power button */}
