@@ -85,7 +85,7 @@ export default function SlidePreview({
       {/* Text content */}
       <div
         style={{
-          paddingTop: slide.showAccentLine ? 0 : (brandConfig.logoPosition === "top" ? 40 : 160),
+          paddingTop: slide.showAccentLine ? 20 : (brandConfig.logoPosition === "top" ? 40 : 160),
           paddingLeft: 80,
           paddingRight: 80,
           textAlign: "center",
