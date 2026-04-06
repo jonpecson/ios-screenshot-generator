@@ -30,7 +30,8 @@ export default function SlidePreview({
   const H = deviceConfig.height;
   const isTablet = deviceConfig.type === "tablet";
 
-  const phoneWidth = isTablet ? W * 0.65 : W * 0.58;
+  const defaultScale = isTablet ? 0.65 : 0.58;
+  const phoneWidth = W * (slide.deviceScale ?? defaultScale);
   const logoSrc = logoData || brandConfig.logoPath;
 
   const inner = (
@@ -137,7 +138,7 @@ export default function SlidePreview({
           alignItems: "flex-end",
           justifyContent: "center",
           paddingBottom: 0,
-          marginTop: 50,
+          marginTop: 50 + (slide.deviceOffsetY ?? 0),
         }}
       >
         {isTablet ? (

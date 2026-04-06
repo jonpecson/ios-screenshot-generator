@@ -240,6 +240,59 @@ export default function SlideEditor({ slide, onChange, onDelete }: SlideEditorPr
         )}
       </div>
 
+      {/* Device Size & Position */}
+      <div className="border-t border-[#222] pt-4">
+        <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">Device Mockup</p>
+
+        {/* Device Scale */}
+        <div className="mb-3">
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-xs text-gray-400">Size</label>
+            <span className="text-xs text-gray-600 font-mono">{Math.round((slide.deviceScale ?? 0.58) * 100)}%</span>
+          </div>
+          <input
+            type="range"
+            min={30}
+            max={90}
+            value={Math.round((slide.deviceScale ?? 0.58) * 100)}
+            onChange={(e) => update({ deviceScale: parseInt(e.target.value) / 100 })}
+            className="w-full accent-[#C9A84C] h-1.5"
+          />
+          <div className="flex justify-between text-[10px] text-gray-600 mt-0.5">
+            <span>Small</span>
+            <span>Large</span>
+          </div>
+        </div>
+
+        {/* Device Vertical Offset */}
+        <div className="mb-3">
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-xs text-gray-400">Vertical Offset</label>
+            <span className="text-xs text-gray-600 font-mono">{slide.deviceOffsetY ?? 0}px</span>
+          </div>
+          <input
+            type="range"
+            min={-200}
+            max={400}
+            value={slide.deviceOffsetY ?? 0}
+            onChange={(e) => update({ deviceOffsetY: parseInt(e.target.value) })}
+            className="w-full accent-[#C9A84C] h-1.5"
+          />
+          <div className="flex justify-between text-[10px] text-gray-600 mt-0.5">
+            <span>Higher</span>
+            <span>Lower</span>
+          </div>
+        </div>
+
+        {/* Reset */}
+        <button
+          onClick={() => update({ deviceScale: undefined, deviceOffsetY: undefined })}
+          className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+        >
+          Reset to default
+        </button>
+      </div>
+
       {/* Delete */}
       <div className="border-t border-[#222] pt-4">
         <button
