@@ -71,13 +71,16 @@ export default function IPadMockup({
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.style.display = "none";
-              target.parentElement!.style.background =
-                "linear-gradient(180deg, #1a1a2e 0%, #2d2d4e 100%)";
-              target.parentElement!.innerHTML = `
-                <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555;font-size:${frameWidth * 0.04}px;text-align:center;padding:20px;">
-                  Drop screenshot<br/>here
-                </div>
-              `;
+              const parent = target.parentElement;
+              if (parent) {
+                parent.style.background =
+                  "linear-gradient(180deg, #1a1a2e 0%, #2d2d4e 100%)";
+                parent.innerHTML = `
+                  <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555;font-size:${frameWidth * 0.04}px;text-align:center;padding:20px;">
+                    Drop screenshot<br/>here
+                  </div>
+                `;
+              }
             }}
           />
         </div>
