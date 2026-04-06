@@ -54,6 +54,7 @@ export default function SlidePreview({
       {slide.showAccentLine && (
         <div
           style={{
+            width: "100%",
             display: "flex",
             justifyContent: "center",
             paddingTop: 100,
