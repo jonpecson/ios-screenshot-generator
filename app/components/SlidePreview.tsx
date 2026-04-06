@@ -63,8 +63,8 @@ export default function SlidePreview({
           <div
             style={{
               width: `${slide.accentLineWidth ?? 10}%`,
-              height: 4,
-              borderRadius: 2,
+              height: 8,
+              borderRadius: 4,
               background: slide.accentLineColor,
             }}
           />
