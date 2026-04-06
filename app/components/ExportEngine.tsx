@@ -13,41 +13,58 @@ interface ExportEngineProps {
 }
 
 export default function ExportEngine({ slides, device, logoData, selectedIndex }: ExportEngineProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [progress, setProgress] = useState("");
-  const [currentExportIndex, setCurrentExportIndex] = useState<number | null>(null);
 
   const deviceConfig = DEVICES[device];
 
-  const exportSlide = useCallback(
+  const doExport = useCallback(
     async (index: number) => {
       const slide = slides[index];
-      setCurrentExportIndex(index);
+      const nodeId = `export-node-${slide.id}`;
 
-      // Wait for render
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      // Wait for images to load
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
-      const node = document.getElementById(`export-slide-${slide.id}`);
+      const node = document.getElementById(nodeId);
       if (!node) {
-        console.error(`Could not find export node for ${slide.id}`);
+        console.error(`Export node not found: ${nodeId}`);
         return false;
       }
 
       try {
-        const dataUrl = await toPng(node, {
-          width: deviceConfig.width,
-          height: deviceConfig.height,
-          pixelRatio: 1,
-          cacheBust: true,
-        });
+        // Multiple attempts — html-to-image sometimes needs a warm-up render
+        let dataUrl: string | null = null;
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            dataUrl = await toPng(node, {
+              width: deviceConfig.width,
+              height: deviceConfig.height,
+              pixelRatio: 1,
+              cacheBust: true,
+              skipAutoScale: true,
+              filter: (domNode: HTMLElement) => {
+                // Skip hidden elements
+                if (domNode.style?.display === "none") return false;
+                return true;
+              },
+            });
+            if (dataUrl) break;
+          } catch {
+            await new Promise((r) => setTimeout(r, 500));
+          }
+        }
+
+        if (!dataUrl) throw new Error("Failed after 3 attempts");
 
         const link = document.createElement("a");
         link.download = `screenshot-${index + 1}.png`;
         link.href = dataUrl;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
 
-        await new Promise((resolve) => setTimeout(resolve, 300));
+        await new Promise((resolve) => setTimeout(resolve, 400));
         return true;
       } catch (err) {
         console.error(`Failed to export ${slide.id}:`, err);
@@ -57,36 +74,32 @@ export default function ExportEngine({ slides, device, logoData, selectedIndex }
     [slides, deviceConfig]
   );
 
-  const exportAll = useCallback(async () => {
-    setExporting(true);
-
-    for (let i = 0; i < slides.length; i++) {
-      setProgress(`Exporting ${i + 1} of ${slides.length}...`);
-      const success = await exportSlide(i);
-      if (!success) {
-        setProgress(`Error exporting slide ${i + 1}. Check console.`);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    }
-
-    setCurrentExportIndex(null);
-    setProgress("All screenshots exported!");
-    setExporting(false);
-    setTimeout(() => setProgress(""), 3000);
-  }, [slides, exportSlide]);
-
   const exportSingle = useCallback(
     async (index: number) => {
       setExporting(true);
       setProgress(`Exporting slide ${index + 1}...`);
-      await exportSlide(index);
-      setCurrentExportIndex(null);
-      setProgress(`Exported slide ${index + 1}!`);
+      const success = await doExport(index);
+      setProgress(success ? `Exported slide ${index + 1}!` : `Failed to export slide ${index + 1}`);
       setExporting(false);
-      setTimeout(() => setProgress(""), 2000);
+      setTimeout(() => setProgress(""), 3000);
     },
-    [exportSlide]
+    [doExport]
   );
+
+  const exportAll = useCallback(async () => {
+    setExporting(true);
+    for (let i = 0; i < slides.length; i++) {
+      setProgress(`Exporting ${i + 1} of ${slides.length}...`);
+      const success = await doExport(i);
+      if (!success) {
+        setProgress(`Error on slide ${i + 1}. Continuing...`);
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+    }
+    setProgress("All screenshots exported!");
+    setExporting(false);
+    setTimeout(() => setProgress(""), 3000);
+  }, [slides, doExport]);
 
   return (
     <>
@@ -115,26 +128,27 @@ export default function ExportEngine({ slides, device, logoData, selectedIndex }
         )}
       </div>
 
-      {/* Hidden off-screen full-size render area */}
+      {/* Off-screen full-size render — ALL slides always mounted */}
       <div
-        ref={containerRef}
         style={{
           position: "fixed",
-          left: "-9999px",
+          left: "-99999px",
           top: 0,
           zIndex: -1,
           pointerEvents: "none",
+          opacity: 0,
         }}
       >
-        {currentExportIndex !== null && slides[currentExportIndex] && (
+        {slides.map((slide) => (
           <SlidePreview
-            id={`export-slide-${slides[currentExportIndex].id}`}
-            slide={slides[currentExportIndex]}
+            key={slide.id}
+            id={`export-node-${slide.id}`}
+            slide={slide}
             device={device}
             logoData={logoData}
             fullSize={true}
           />
-        )}
+        ))}
       </div>
     </>
   );
