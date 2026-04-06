@@ -55,7 +55,7 @@ export const DEVICES: Record<DeviceType, DeviceConfig> = {
 };
 
 export const brandConfig = {
-  name: "Empire Crypto Trading",
+  name: "Your App Name",
   logoPath: "/images/logo-horizontal.png",
   accentColor: "#C9A84C",
   showLogo: true,
