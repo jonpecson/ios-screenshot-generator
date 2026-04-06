@@ -50,18 +50,25 @@ export default function SlidePreview({
           '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif',
       }}
     >
-      {/* Accent line at top */}
+      {/* Accent line — centered short bar matching reference design */}
       {slide.showAccentLine && (
         <div
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 6,
-            background: slide.accentLineColor,
+            display: "flex",
+            justifyContent: "center",
+            paddingTop: 80,
+            marginBottom: 20,
           }}
-        />
+        >
+          <div
+            style={{
+              width: `${slide.accentLineWidth ?? 10}%`,
+              height: 4,
+              borderRadius: 2,
+              background: slide.accentLineColor,
+            }}
+          />
+        </div>
       )}
 
       {/* Logo at top */}
@@ -78,7 +85,7 @@ export default function SlidePreview({
       {/* Text content */}
       <div
         style={{
-          paddingTop: brandConfig.logoPosition === "top" ? 40 : 160,
+          paddingTop: slide.showAccentLine ? 0 : (brandConfig.logoPosition === "top" ? 40 : 160),
           paddingLeft: 80,
           paddingRight: 80,
           textAlign: "center",

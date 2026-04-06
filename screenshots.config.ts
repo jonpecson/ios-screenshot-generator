@@ -24,6 +24,8 @@ export interface SlideConfig {
   showCategory?: boolean;
   /** Show/hide subtitle (default: true) */
   showSubtitle?: boolean;
+  /** Accent line width as percentage of slide width (default: 10) */
+  accentLineWidth?: number;
   /** Font size overrides (defaults: category=28, title=96, subtitle=38) */
   categorySize?: number;
   titleSize?: number;

@@ -259,28 +259,37 @@ export default function SlideEditor({ slide, onChange, onDelete }: SlideEditorPr
       />
 
       {/* Accent line */}
-      <div className="flex items-center gap-2">
-        <label className="text-xs text-gray-400 w-24 shrink-0">Accent Line</label>
-        <input
-          type="checkbox"
-          checked={slide.showAccentLine}
-          onChange={(e) => update({ showAccentLine: e.target.checked })}
-          className="accent-[#C9A84C]"
-        />
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          <label className="text-xs text-gray-400 w-24 shrink-0">Accent Line</label>
+          <input
+            type="checkbox"
+            checked={slide.showAccentLine}
+            onChange={(e) => update({ showAccentLine: e.target.checked })}
+            className="accent-[#C9A84C]"
+          />
+          {slide.showAccentLine && (
+            <div className="flex items-center gap-1.5 flex-1">
+              <input
+                type="color"
+                value={slide.accentLineColor}
+                onChange={(e) => update({ accentLineColor: e.target.value })}
+                className="w-7 h-7 rounded border border-[#333] bg-transparent cursor-pointer p-0"
+              />
+              <input
+                type="text"
+                value={slide.accentLineColor}
+                onChange={(e) => update({ accentLineColor: e.target.value })}
+                className="flex-1 bg-[#111] border border-[#333] rounded px-2 py-1 text-xs text-gray-300 outline-none focus:border-[#C9A84C] font-mono"
+              />
+            </div>
+          )}
+        </div>
         {slide.showAccentLine && (
-          <div className="flex items-center gap-1.5 flex-1">
-            <input
-              type="color"
-              value={slide.accentLineColor}
-              onChange={(e) => update({ accentLineColor: e.target.value })}
-              className="w-7 h-7 rounded border border-[#333] bg-transparent cursor-pointer p-0"
-            />
-            <input
-              type="text"
-              value={slide.accentLineColor}
-              onChange={(e) => update({ accentLineColor: e.target.value })}
-              className="flex-1 bg-[#111] border border-[#333] rounded px-2 py-1 text-xs text-gray-300 outline-none focus:border-[#C9A84C] font-mono"
-            />
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-gray-500 w-12">Width</span>
+            <input type="range" min={5} max={50} value={slide.accentLineWidth ?? 10} onChange={(e) => update({ accentLineWidth: parseInt(e.target.value) })} className="flex-1 accent-[#C9A84C] h-1" />
+            <span className="text-[10px] text-gray-600 font-mono w-8">{slide.accentLineWidth ?? 10}%</span>
           </div>
         )}
       </div>
