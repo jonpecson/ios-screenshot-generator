@@ -9,9 +9,10 @@ interface ExportEngineProps {
   slides: SlideConfig[];
   device: DeviceType;
   logoData: string | null;
+  selectedIndex?: number;
 }
 
-export default function ExportEngine({ slides, device, logoData }: ExportEngineProps) {
+export default function ExportEngine({ slides, device, logoData, selectedIndex }: ExportEngineProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [progress, setProgress] = useState("");
@@ -90,7 +91,16 @@ export default function ExportEngine({ slides, device, logoData }: ExportEngineP
   return (
     <>
       {/* Export controls */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
+        {selectedIndex !== undefined && (
+          <button
+            onClick={() => exportSingle(selectedIndex)}
+            disabled={exporting}
+            className="px-4 py-2.5 rounded-lg font-semibold text-sm text-gray-200 border border-[#333] bg-[#1a1a1a] transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:border-[#C9A84C] hover:text-white active:scale-95"
+          >
+            {exporting ? "..." : `Export Slide ${selectedIndex + 1}`}
+          </button>
+        )}
         <button
           onClick={exportAll}
           disabled={exporting}

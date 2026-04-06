@@ -92,7 +92,7 @@ export default function SlidePreview({
         {slide.showCategory !== false && slide.category && (
           <div
             style={{
-              fontSize: 28,
+              fontSize: slide.categorySize ?? 28,
               fontWeight: 600,
               color: slide.categoryColor,
               letterSpacing: 4,
@@ -106,7 +106,7 @@ export default function SlidePreview({
 
         <h1
           style={{
-            fontSize: 96,
+            fontSize: slide.titleSize ?? 96,
             fontWeight: 800,
             color: slide.titleColor,
             lineHeight: 1.1,
@@ -120,7 +120,7 @@ export default function SlidePreview({
         {slide.showSubtitle !== false && (
           <p
             style={{
-              fontSize: 38,
+              fontSize: slide.subtitleSize ?? 38,
               color: slide.subtitleColor,
               marginTop: 28,
               lineHeight: 1.4,

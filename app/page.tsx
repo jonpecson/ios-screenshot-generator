@@ -133,7 +133,7 @@ export default function Home() {
             {deviceConfig.width}x{deviceConfig.height}
           </div>
 
-          <ExportEngine slides={slides} device={device} logoData={logoData} />
+          <ExportEngine slides={slides} device={device} logoData={logoData} selectedIndex={selectedIndex} />
         </div>
       </header>
 

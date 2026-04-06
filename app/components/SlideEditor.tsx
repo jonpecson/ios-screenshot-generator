@@ -86,13 +86,20 @@ export default function SlideEditor({ slide, onChange, onDelete }: SlideEditorPr
           </label>
         </div>
         {slide.showCategory !== false && (
-          <input
-            type="text"
-            value={slide.category}
-            onChange={(e) => update({ category: e.target.value })}
-            placeholder="e.g. COMMUNITY"
-            className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors"
-          />
+          <>
+            <input
+              type="text"
+              value={slide.category}
+              onChange={(e) => update({ category: e.target.value })}
+              placeholder="e.g. COMMUNITY"
+              className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors"
+            />
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-[10px] text-gray-500 w-8">Size</span>
+              <input type="range" min={16} max={48} value={slide.categorySize ?? 28} onChange={(e) => update({ categorySize: parseInt(e.target.value) })} className="flex-1 accent-[#C9A84C] h-1" />
+              <span className="text-[10px] text-gray-600 font-mono w-8">{slide.categorySize ?? 28}</span>
+            </div>
+          </>
         )}
       </div>
 
@@ -107,6 +114,11 @@ export default function SlideEditor({ slide, onChange, onDelete }: SlideEditorPr
           rows={2}
           className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors resize-none font-mono"
         />
+        <div className="flex items-center gap-2 mt-1.5">
+          <span className="text-[10px] text-gray-500 w-8">Size</span>
+          <input type="range" min={48} max={160} value={slide.titleSize ?? 96} onChange={(e) => update({ titleSize: parseInt(e.target.value) })} className="flex-1 accent-[#C9A84C] h-1" />
+          <span className="text-[10px] text-gray-600 font-mono w-8">{slide.titleSize ?? 96}</span>
+        </div>
       </div>
 
       {/* Subtitle */}
@@ -126,12 +138,19 @@ export default function SlideEditor({ slide, onChange, onDelete }: SlideEditorPr
           </label>
         </div>
         {slide.showSubtitle !== false && (
-          <input
-            type="text"
-            value={slide.subtitle}
-            onChange={(e) => update({ subtitle: e.target.value })}
-            className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors"
-          />
+          <>
+            <input
+              type="text"
+              value={slide.subtitle}
+              onChange={(e) => update({ subtitle: e.target.value })}
+              className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-gray-200 outline-none focus:border-[#C9A84C] transition-colors"
+            />
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-[10px] text-gray-500 w-8">Size</span>
+              <input type="range" min={20} max={64} value={slide.subtitleSize ?? 38} onChange={(e) => update({ subtitleSize: parseInt(e.target.value) })} className="flex-1 accent-[#C9A84C] h-1" />
+              <span className="text-[10px] text-gray-600 font-mono w-8">{slide.subtitleSize ?? 38}</span>
+            </div>
+          </>
         )}
       </div>
 

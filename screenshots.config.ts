@@ -24,6 +24,10 @@ export interface SlideConfig {
   showCategory?: boolean;
   /** Show/hide subtitle (default: true) */
   showSubtitle?: boolean;
+  /** Font size overrides (defaults: category=28, title=96, subtitle=38) */
+  categorySize?: number;
+  titleSize?: number;
+  subtitleSize?: number;
   /** Device mockup size as percentage of slide width (0.3 to 0.9, default: 0.58 phone / 0.65 tablet) */
   deviceScale?: number;
   /** Vertical offset for the device mockup in pixels (positive = lower) */
