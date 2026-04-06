@@ -56,7 +56,7 @@ export const DEVICES: Record<DeviceType, DeviceConfig> = {
 
 export const brandConfig = {
   name: "Your App Name",
-  logoPath: "/images/logo-horizontal.png",
+  logoPath: "/images/logo.svg",
   accentColor: "#C9A84C",
   showLogo: true,
   logoPosition: "bottom" as "top" | "bottom",
